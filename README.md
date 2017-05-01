@@ -51,3 +51,21 @@ Extracting the intermediate features for a given layer in the PredNet can be don
 <br>
 
 <sup>1</sup> Note on implementation:  PredNet inherits from the Recurrent layer class, i.e. it has an internal state and a step function. Given the top-down then bottom-up update sequence, it must currently be implemented in Keras as essentially a 'super' layer where all layers in the PredNet are in one PredNet 'layer'. This is less than ideal, but it seems like the most efficient way as of now. We welcome suggestions if anyone thinks of a better implementation.  
+
+
+# Install
+
+## Mac
+
+### Optional - create a conda environment
+
+```
+conda create --name prednet python=2
+source activate prednet
+```
+
+### Install tensorflow 12.1 for python 2 on mac
+```
+export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.12.1-py2-none-any.whl
+sudo pip install --upgrade $TF_BINARY_URL
+```
