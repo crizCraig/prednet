@@ -1,0 +1,5 @@
+deep prediction
+
+[ ] Predict top down 2D rather than forward
+[ ] Input top down 2D segments, dimensions, rotation, velocities in addition to pixels as separate channels
+[ ] Take inspiration from R-FCN to pool predicted dimensions, rotations, velocities into instances

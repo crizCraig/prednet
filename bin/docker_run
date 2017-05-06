@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -e
+#set -v
+
+# usage
+
+# ./bin/docker_run train gpu
+# ./bin/docker_run eval cpu
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+ROOT=${DIR}/..
+
+if [ $1 = "train" ]; then
+    echo training
+    EXE='python -u kitti_train.py'
+else
+    echo evaluating
+    EXE='python -u kitti_evaluate.py'
+fi
+
+MOUNT=${ROOT}/kitti_data:/prednet/kitti_data
+
+if [ $2 = "cpu" ]; then
+    echo cpu
+    docker run -v ${MOUNT} prednet:cpu ${EXE}
+else
+    echo gpu
+    nvidia-docker run -v ${MOUNT} prednet ${EXE}
+fi
