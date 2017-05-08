@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM nvidia/cuda:8.0-cudnn5-devel
 
 # Install dependencies
 RUN apt-get -qq update           &&  \
@@ -6,8 +6,6 @@ RUN apt-get -qq update           &&  \
         "build-essential"            \
         "git"                        \
         "wget"                       \
-        "libopenblas-dev"            \
-        "liblapack-dev"              \
         "pkg-config"              && \
     rm -rf /var/lib/apt/lists/*
 
@@ -28,7 +26,7 @@ ENV PATH="/opt/conda/bin/:${PATH}"
 # Install tensorflow
 ENV TENSORFLOW_VERSION 0.12.1
 RUN pip --no-cache-dir install \
-    http://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${TENSORFLOW_VERSION}-cp27-none-linux_x86_64.whl
+    http://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${TENSORFLOW_VERSION}-cp27-none-linux_x86_64.whl
 
 RUN pip --no-cache-dir install keras==1.2.1
 
@@ -47,5 +45,3 @@ EXPOSE 6006
 EXPOSE 8888
 
 COPY . .
-
-

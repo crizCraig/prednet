@@ -1,0 +1,13 @@
+deep prediction
+
+[ ] Predict top down 2D rather than forward
+[ ] Input top down 2D segments, dimensions, rotation, velocities in addition to pixels as separate channels
+[ ] Take inspiration from R-FCN to output position sensitive dimensions, rotation, velocities with score maps
+
+anomaly detection
+
+Would detecting anomalies help in tuning the cost function to say - hey the entities in this area are more uncertain - adjust the cost to say keep a larger safe distance, but not so large of an adjustment that it would hit another car in a NASCAR drive through like scenario.
+
+How are non-convex costs like distance from object handled? (I think multiple constraints can be handled via double gradient decent)
+
+The first frames that you see something strange will likely result in a large prediction delta, whereas subsequent frames may not - so that object should be tracked after initially categorizing it as acting strange.
