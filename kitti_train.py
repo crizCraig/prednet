@@ -1,7 +1,9 @@
 '''
 Train PredNet on KITTI sequences. (Geiger et al. 2013, http://www.cvlibs.net/datasets/kitti/)
 '''
-
+from __future__ import print_function
+from six import reraise
+import sys
 import os
 import numpy as np
 np.random.seed(123)
@@ -38,7 +40,7 @@ N_seq_val = 100  # number of sequences to use for validation
 
 # Model parameters
 nt = 10
-n_channels, im_height, im_width = (3, 128, 160)
+n_channels, im_height, im_width = (3, 160, 160)
 input_shape = (n_channels, im_height, im_width) if K.image_dim_ordering() == 'th' else (im_height, im_width, n_channels)
 stack_sizes = (n_channels, 48, 96, 192)
 R_stack_sizes = stack_sizes
@@ -72,10 +74,16 @@ if save_model:
     if not os.path.exists(WEIGHTS_DIR): os.mkdir(WEIGHTS_DIR)
     callbacks.append(ModelCheckpoint(filepath=weights_file, monitor='val_loss', save_best_only=True))
 
-history = model.fit_generator(train_generator, samples_per_epoch, nb_epoch, callbacks=callbacks,
-                    validation_data=val_generator, nb_val_samples=N_seq_val)
-
-if save_model:
-    json_string = model.to_json()
-    with open(json_file, "w") as f:
-        f.write(json_string)
+try:
+    while True:
+        print('training')
+        history = model.fit_generator(train_generator, samples_per_epoch, nb_epoch, callbacks=callbacks,
+                                      validation_data=val_generator, nb_val_samples=N_seq_val)
+except:
+    reraise(*sys.exc_info())
+finally:
+    print('saving model')
+    if save_model:
+        json_string = model.to_json()
+        with open(json_file, "w") as f:
+            f.write(json_string)

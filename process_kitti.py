@@ -12,8 +12,8 @@ import hickle as hkl
 from kitti_settings import *
 
 
-desired_im_sz = (128, 160)
-categories = ['city', 'residential', 'road']
+desired_im_sz = (160, 160)
+categories = ['city'] # ,'residential', 'road']
 
 # Recordings used for validation and testing.
 # Were initially chosen randomly such that one of the city recordings was used for validation and one of each category was used for testing.
@@ -79,13 +79,14 @@ def process_data():
             source_list += [category + '-' + folder] * len(files)
 
         print 'Creating ' + split + ' data: ' + str(len(im_list)) + ' images'
-        X = np.zeros((len(im_list),) + desired_im_sz + (3,), np.uint8)
-        for i, im_file in enumerate(im_list):
-            im = imread(im_file)
-            X[i] = process_im(im, desired_im_sz)
+        if im_list:
+            X = np.zeros((len(im_list),) + desired_im_sz + (3,), np.uint8)
+            for i, im_file in enumerate(im_list):
+                im = imread(im_file)
+                X[i] = process_im(im, desired_im_sz)
 
-        hkl.dump(X, os.path.join(DATA_DIR, 'X_' + split + '.hkl'))
-        hkl.dump(source_list, os.path.join(DATA_DIR, 'sources_' + split + '.hkl'))
+            hkl.dump(X, os.path.join(DATA_DIR, 'X_' + split + '.hkl'))
+            hkl.dump(source_list, os.path.join(DATA_DIR, 'sources_' + split + '.hkl'))
 
 
 # resize and crop image
@@ -98,6 +99,6 @@ def process_im(im, desired_sz):
 
 
 if __name__ == '__main__':
-    download_data()
-    extract_data()
+    # download_data()
+    # extract_data()
     process_data()
