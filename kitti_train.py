@@ -75,10 +75,9 @@ if save_model:
     callbacks.append(ModelCheckpoint(filepath=weights_file, monitor='val_loss', save_best_only=True))
 
 try:
-    while True:
-        print('training')
-        history = model.fit_generator(train_generator, samples_per_epoch, nb_epoch, callbacks=callbacks,
-                                      validation_data=val_generator, nb_val_samples=N_seq_val)
+    print('training')
+    history = model.fit_generator(train_generator, samples_per_epoch, nb_epoch, callbacks=callbacks,
+                                  validation_data=val_generator, nb_val_samples=N_seq_val)
 except:
     reraise(*sys.exc_info())
 finally:

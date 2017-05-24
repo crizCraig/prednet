@@ -69,3 +69,11 @@ source activate prednet
 export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.12.1-py2-none-any.whl
 sudo pip install --upgrade $TF_BINARY_URL
 ```
+
+
+To run with docker:
+
+```
+nvidia-docker run -it -v `pwd`/data:/prednet/data -v `pwd`/model_data:/prednet/model_data -v `pwd`/kitti_results:/prednet/kitti_results prednet bash
+python kitti_train.py
+```

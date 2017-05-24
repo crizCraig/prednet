@@ -20,7 +20,7 @@ else
     EXE='python -u kitti_evaluate.py'
 fi
 
-MOUNT=${ROOT}/kitti_data:/prednet/kitti_data
+MOUNT=${ROOT}/data:/prednet/data
 
 if [ $2 = "cpu" ]; then
     echo cpu
