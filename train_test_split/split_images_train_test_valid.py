@@ -13,11 +13,12 @@ CURR_DIR = dir_path = os.path.dirname(os.path.realpath(__file__))
 TRAIN_PCT = 95.
 TEST_PCT = 2.5
 VALID_PCT = 2.5
-OUT_DIR = 'train_test_valid_split'
-FILE_TYPE = 'jpg'
+OUT_DIR = '/home/jetta/src/prednet2/data'
+FILE_TYPE = 'png'
 SHUFFLE = False
 _try_out = False
-IMAGE_DIR = CURR_DIR
+IMAGE_DIR = '/home/jetta/src/prednet2/data_raw'
+DRY_RUN = False
 
 
 def main():
@@ -25,10 +26,11 @@ def main():
         create_test_files()
 
     print('Creating ', OUT_DIR)
-    os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR))
-    os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'train'))
-    os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'test'))
-    os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'val'))
+    if not DRY_RUN:
+        os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR))
+        os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'train'))
+        os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'test'))
+        os.makedirs(os.path.join(IMAGE_DIR, OUT_DIR, 'val'))
 
     matches = []
     for root, dir_names, file_names in os.walk(IMAGE_DIR):
@@ -38,6 +40,8 @@ def main():
     if SHUFFLE:
         from random import shuffle
         shuffle(matches)
+    else:
+        matches = sorted(matches)
 
     print('splitting', len(matches), 'files')
 
@@ -46,16 +50,30 @@ def main():
     assert VALID_PCT == 100 - TRAIN_PCT - TEST_PCT
 
     def copy_to(src, dest):
-        shutil.copy2(src, os.path.join(OUT_DIR, dest))
+        full_dest = os.path.join(OUT_DIR, dest)
+        print('copying', src, 'to', full_dest)
+        if not DRY_RUN:
+            shutil.copy2(src, full_dest)
 
+    train_finish_group = None
+    test_finish_group = None
     for i, match in enumerate(matches):
+        group = match[-21:-15]
         if i < train_end:
+            copy_to(match, 'train')
+            train_finish_group = group
+        elif group == train_finish_group:
             copy_to(match, 'train')
         elif i < test_end:
             copy_to(match, 'test')
+            test_finish_group = group
+        elif group == test_finish_group:
+            copy_to(match, 'test')
         else:
-            copy_to(match, 'valid')
+            copy_to(match, 'val')
+        print(i)
 
+    print('train end', train_end, 'test end', test_end)
 
 def create_test_files():
     if os.path.exists(os.path.join(IMAGE_DIR, OUT_DIR)):

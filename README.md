@@ -74,6 +74,7 @@ sudo pip install --upgrade $TF_BINARY_URL
 To run with docker:
 
 ```
-nvidia-docker run -it -v `pwd`/data:/prednet/data -v `pwd`/model_data:/prednet/model_data -v `pwd`/kitti_results:/prednet/kitti_results prednet bash
+make
 python kitti_train.py
+python kitti_evaluate.py
 ```

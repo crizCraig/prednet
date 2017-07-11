@@ -12,12 +12,12 @@ import hickle as hkl
 from kitti_settings import *
 
 
-desired_im_sz = (160, 160)
-categories = ['sfo']
+desired_im_sz = (500, 500)
+categories = ['random_logs']
 
 # Recordings used for validation and testing.
-val_recordings = [('sfo', 'val')]
-test_recordings = [('sfo', 'test')]
+val_recordings = [('random_logs', 'val')]
+test_recordings = [('random_logs', 'test')]
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
@@ -31,6 +31,7 @@ def process_data():
     not_train = splits['val'] + splits['test']
     for c in categories:  # Randomly assign recordings to training and testing. Cross-validation done across entire recordings.
         c_dir = os.path.join(DATA_DIR, 'raw', c + '/')
+        print('c_dir', c_dir)
         _, folders, _ = os.walk(c_dir).next()
         splits['train'] += [(c, f) for f in folders if (c, f) not in not_train]
 
@@ -39,6 +40,7 @@ def process_data():
         source_list = []  # corresponds to recording that image came from
         for category, folder in splits[split]:
             im_dir = os.path.join(DATA_DIR, 'raw', category, folder)
+            print('im_dir', im_dir)
             _, _, files = os.walk(im_dir).next()
             im_list += [os.path.join(im_dir, f) for f in sorted(files)]
             source_list += [category + '-' + folder] * len(files)

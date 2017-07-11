@@ -16,7 +16,7 @@ RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86
 
 # Install requirements before copying project files
 WORKDIR /prednet
-RUN /opt/conda/bin/conda install -q -y conda numpy scipy pip pillow
+RUN /opt/conda/bin/conda install -q -y conda numpy scipy pip pillow opencv
 COPY requirements.txt .
 RUN /opt/conda/bin/python -m pip install -q -r "requirements.txt"
 
